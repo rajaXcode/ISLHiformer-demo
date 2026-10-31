@@ -1,5 +1,46 @@
-🤟 ISL-HiFormerISL-HiFormer is a parameter-efficient, dual-stream AI architecture designed to democratize Indian Sign Language (ISL) recognition. By combining a frozen spatio-temporal transformer backbone with meta-learned PEFT (Parameter-Efficient Fine-Tuning) adapters, this system can adapt to a completely new signer using just 5 to 20 video examples in seconds—all on standard consumer hardware.🛑 The ProblemCurrent sign language AI models are "one-size-fits-all." However, just like spoken accents, every person signs differently (varying hand shapes, speed, and posture). When deployed, generic models suffer a massive accuracy drop on unseen signers. Retraining these massive networks per user requires expensive cloud GPUs and hours of data, making them inaccessible for public schools and NGOs.💡 Our SolutionISL-HiFormer flips the paradigm: the AI adapts to the user, not the other way around.
-We utilize a Dual-Stream Architecture (Skeleton Pose via MediaPipe + RGB Spatial Context via CNN) fused with Cross-Attention.Instead of full-network fine-tuning, the heavy transformer backbone is locked. We only train tiny, meta-learned adapters (comprising ~2% of the network parameters) during the user enrollment phase.Key FeaturesFew-Shot Adaptation (K-Shot): Adapts to a new signer's unique style with only $K=5, 10,$ or $20$ short support clips.Dual-Stream Processing: Combines MediaPipe Holistic (body/hand dynamics) with an RGB CNN (facial expressions/context).Zero-Cost Personalization: Adapter updates are so lightweight they can run locally or on free-tier cloud GPUs (Google Colab/Kaggle).Dual Output Heads: Supports isolated word classification and continuous sentence translation (via a CTC Sequence Head).🏗️ System ArchitectureInput Streams: Video is parsed into Skeleton landmarks and RGB frames.Feature Extraction: MediaPipe extracts stick-figure motion; a lightweight CNN (e.g., EfficientNet) extracts visual context.Cross-Attention Fusion: Both modalities are merged to ensure high reliability even if hands are blurred.Hierarchical Transformer: Analyzes frames, then short motions, then the full sign. (This backbone is FROZEN during deployment).PEFT Adapters: Tiny bottleneck layers distributed throughout the transformer. These are updated using gradient descent during user setup.MAML / Reptile: Meta-learning algorithms precondition the adapters so they converge rapidly with very little data.📂 Repository StructureISL-HiFormer/
+# ISL-HiFormer
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.x-EE4C2C.svg)](https://pytorch.org/)
+[![Status: Concept/Development](https://img.shields.io/badge/Status-Development-orange.svg)]()
+
+**ISL-HiFormer** is a parameter-efficient, dual-stream AI architecture designed to democratize Indian Sign Language (ISL) recognition. By combining a frozen spatio-temporal transformer backbone with meta-learned PEFT (Parameter-Efficient Fine-Tuning) adapters, this system can adapt to a completely new signer using just 5 to 20 video examples in seconds—all on standard consumer hardware.
+
+---
+
+## The Problem
+Current sign language AI models are "one-size-fits-all." However, just like spoken accents, **every person signs differently** (varying hand shapes, speed, and posture). When deployed, generic models suffer a massive accuracy drop on unseen signers. Retraining these massive networks per user requires expensive cloud GPUs and hours of data, making them inaccessible for public schools and NGOs.
+
+## 💡 Our Solution
+ISL-HiFormer flips the paradigm: **the AI adapts to the user, not the other way around.** 
+We utilize a **Dual-Stream Architecture** (Skeleton Pose via MediaPipe + RGB Spatial Context via CNN) fused with Cross-Attention. 
+
+Instead of full-network fine-tuning, the heavy transformer backbone is **locked**. We only train tiny, meta-learned adapters (comprising ~2% of the network parameters) during the user enrollment phase.
+
+### Key Features
+* **Few-Shot Adaptation (K-Shot):** Adapts to a new signer's unique style with only $K=5, 10,$ or $20$ short support clips.
+* **Dual-Stream Processing:** Combines MediaPipe Holistic (body/hand dynamics) with an RGB CNN (facial expressions/context).
+* **Zero-Cost Personalization:** Adapter updates are so lightweight they can run locally or on free-tier cloud GPUs (Google Colab/Kaggle).
+* **Dual Output Heads:** Supports isolated word classification and continuous sentence translation (via a CTC Sequence Head).
+
+---
+
+## 🏗️ System Architecture
+
+1. **Input Streams**: Video is parsed into Skeleton landmarks and RGB frames.
+2. **Feature Extraction**: MediaPipe extracts stick-figure motion; a lightweight CNN (e.g., EfficientNet) extracts visual context.
+3. **Cross-Attention Fusion**: Both modalities are merged to ensure high reliability even if hands are blurred.
+4. **Hierarchical Transformer**: Analyzes frames, then short motions, then the full sign. *(This backbone is FROZEN during deployment).*
+5. **PEFT Adapters**: Tiny bottleneck layers distributed throughout the transformer. These are updated using gradient descent during user setup.
+6. **MAML / Reptile**: Meta-learning algorithms precondition the adapters so they converge rapidly with very little data.
+
+---
+
+## 📂 Repository Structure
+
+```text
+ISL-HiFormer/
 │
 ├── data/                   # Data loaders and preprocessing scripts (INCLUDE/iSign)
 ├── models/                 # Model definitions
@@ -13,9 +54,56 @@ We utilize a Dual-Stream Architecture (Skeleton Pose via MediaPipe + RGB Spatial
 ├── adapt_signer.py         # Script to run K-shot adaptation on a new user
 ├── requirements.txt        # Python dependencies
 └── README.md
-🚀 Getting Started1. InstallationClone the repository and install the required dependencies:git clone https://github.com/YourOrg/ISL-HiFormer.git
+```
+
+---
+
+## 🚀 Getting Started
+
+### 1. Installation
+Clone the repository and install the required dependencies:
+```bash
+git clone https://github.com/YourOrg/ISL-HiFormer.git
 cd ISL-HiFormer
 pip install -r requirements.txt
-2. Dataset SetupThis project benchmarks on the INCLUDE (isolated signs) and iSign (continuous) datasets.Download the INCLUDE dataset here (link to official source).Run the preprocessing script to extract and cache MediaPipe pose features:python data/extract_poses.py --dataset_path ./data/raw --output_path ./data/processed
-3. Running the Live Demo (Gradio)To launch the simulated 2-phase UI (Enrollment + Live Inference):python app/app.py
-This will open a local web server (http://localhost:7860) where you can:Phase 1 (Enrollment): Record 5 calibration signs via webcam to train your personal adapter.Phase 2 (Inference): See real-time translated ISL text using your custom weights.🧪 Evaluation MetricsDuring benchmarking, the system is evaluated using Leave-One-Signer-Out cross-validation. We measure:Top-1 / Top-5 Accuracy for isolated signs.Word Error Rate (WER) for continuous sequences.Gap-Closure Ratio (How much the adapter closes the gap between zero-shot baseline and full-network fine-tuning).👥 Team GestureXDeveloped for the SEVA FIRST Innovation Challenge 2026 by:Raja (Lead) - Data pipelines & Pose ExtractionRitesh Anand - Dual-stream Backbone & CTCPankaj Kumar - PEFT Adapters & Meta-LearningAnkit Samal - Live UI & DeploymentGuide: Miss Anukriti KaushalDelhi Technological University (DTU) | Group ID: DTU/CSE/BTP/GP142📜 LicenseThis project is licensed under the MIT License - see the LICENSE file for details. (Note: Datasets used for training may have their own respective academic/research licenses).
+```
+
+### 2. Dataset Setup
+This project benchmarks on the **INCLUDE** (isolated signs) and **iSign** (continuous) datasets. 
+* Download the INCLUDE dataset [here](#) (link to official source).
+* Run the preprocessing script to extract and cache MediaPipe pose features:
+```bash
+python data/extract_poses.py --dataset_path ./data/raw --output_path ./data/processed
+```
+
+### 3. Running the Live Demo (Gradio)
+To launch the simulated 2-phase UI (Enrollment + Live Inference):
+```bash
+python app/app.py
+```
+This will open a local web server (`http://localhost:7860`) where you can:
+1. **Phase 1 (Enrollment):** Record 5 calibration signs via webcam to train your personal adapter.
+2. **Phase 2 (Inference):** See real-time translated ISL text using your custom weights.
+
+---
+
+## 🧪 Evaluation Metrics
+During benchmarking, the system is evaluated using **Leave-One-Signer-Out** cross-validation. We measure:
+* **Top-1 / Top-5 Accuracy** for isolated signs.
+* **Word Error Rate (WER)** for continuous sequences.
+* **Gap-Closure Ratio** (How much the adapter closes the gap between zero-shot baseline and full-network fine-tuning).
+
+---
+
+## 👥 Team GestureX
+Developed for the **SEVA FIRST Innovation Challenge 2026** by:
+* **Raja (Lead)** - Data pipelines & Pose Extraction
+* **Ritesh Anand** - Dual-stream Backbone & CTC 
+* **Pankaj Kumar** - PEFT Adapters & Meta-Learning 
+* **Ankit Samal** - Live UI & Deployment 
+* **Guide**: Miss Anukriti Kaushal 
+
+*Delhi Technological University (DTU) | Group ID: DTU/CSE/BTP/GP142*
+
+## 📜 License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details. (Note: Datasets used for training may have their own respective academic/research licenses).
