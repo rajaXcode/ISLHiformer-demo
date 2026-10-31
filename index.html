@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ISL-HiFormer — Conceptual Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070b16;--card:#0d1426;--bd:#1c2742;--tx:#e8edf8;--mu:#8a96b3;--cy:#22d3ee;--bl:#4f8cff;--vi:#a78bfa;--gr:#34d399;--am:#fbbf24;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%;font-size:clamp(13px,.88vw,20px)}
+*{box-sizing:border-box;margin:0}
+body{height:100%;background:radial-gradient(900px 500px at 15% -10%,#14234a55,transparent),radial-gradient(800px 500px at 100% 110%,#2a1a5a44,transparent),var(--bg);color:var(--tx);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;display:flex;flex-direction:column;overflow:hidden}
+header{display:flex;align-items:center;gap:1.2rem;padding:.9rem 2rem;border-bottom:1px solid var(--bd)}
+.logo{font-weight:700;letter-spacing:.02em}.logo b{color:var(--cy)}
+.prog{flex:1;display:flex;gap:6px}.prog i{flex:1;height:4px;border-radius:2px;background:var(--bd);cursor:pointer;overflow:hidden}.prog i.d{background:var(--bl)}.prog i.c{background:linear-gradient(90deg,var(--cy),var(--vi))}
+.badge{font-size:.72rem;color:var(--am);border:1px solid #fbbf2455;padding:.25rem .6rem;border-radius:99px;white-space:nowrap}
+main{flex:1;min-height:0;position:relative}
+.sc{position:absolute;inset:0;padding:1.6rem 3rem;display:flex;flex-direction:column;justify-content:center;gap:1.3rem;max-width:1700px;margin:auto;animation:fin .6s ease both}
+@keyframes fin{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.in{animation:fin .6s ease both;animation-delay:calc(var(--i,0)*.12s)}
+.eyebrow{color:var(--cy);font-size:.8rem;letter-spacing:.16em;text-transform:uppercase;font-weight:600}
+h1{font-size:3rem;line-height:1.1;letter-spacing:-.02em;font-weight:700}h2{font-size:2.2rem;letter-spacing:-.02em;font-weight:700;line-height:1.15}
+.sub{color:var(--mu);font-size:1.15rem;max-width:60rem;line-height:1.5}
+.card{background:linear-gradient(180deg,#101a31,var(--card));border:1px solid var(--bd);border-radius:14px;padding:1.1rem 1.2rem;position:relative}
+.row{display:flex;gap:1.1rem;align-items:stretch}.row>*{flex:1;min-width:0}
+canvas{width:100%;display:block;border-radius:10px;background:#050812}
+.lbl{font-size:.82rem;color:var(--mu);margin-top:.5rem;line-height:1.4}.lbl b{color:var(--tx)}
+.tag{display:inline-block;font-size:.7rem;padding:.2rem .55rem;border-radius:99px;border:1px solid var(--bd);color:var(--mu)}
+.tag.sim{color:var(--am);border-color:#fbbf2455}
+button{font:inherit;cursor:pointer;color:var(--tx);background:#131d36;border:1px solid var(--bd);padding:.55rem 1rem;border-radius:9px;transition:.2s}
+button:hover{border-color:var(--bl);transform:translateY(-1px)}button:disabled{opacity:.4;pointer-events:none}
+button.pri{background:linear-gradient(90deg,#2563eb,#7c3aed);border:0;font-weight:600;padding:.75rem 1.4rem}
+button.on{border-color:var(--cy);color:var(--cy)}
+footer{display:flex;align-items:center;gap:.6rem;padding:.8rem 2rem;border-top:1px solid var(--bd)}footer .sp{flex:1}
+.pres header,.pres footer{display:none}.pres footer{position:fixed}
+.pres #hint{opacity:1}#hint{position:fixed;right:1rem;bottom:.6rem;font-size:.7rem;color:var(--mu);opacity:0;transition:.3s}
+.pipe{display:flex;align-items:center}
+.node{flex:1;min-width:0;text-align:center;padding:1rem .5rem;position:relative;cursor:help}
+.node .n{font-size:.7rem;color:var(--cy)}.node .t{font-weight:600;margin:.25rem 0;font-size:.95rem}.node .s{font-size:.75rem;color:var(--mu)}
+[data-tip]:hover::after{content:attr(data-tip);position:absolute;left:50%;top:100%;transform:translate(-50%,8px);width:15rem;background:#1a2540;border:1px solid var(--bl);border-radius:8px;padding:.6rem .7rem;font-size:.78rem;color:var(--tx);z-index:9;line-height:1.4;text-align:left;font-weight:400}
+.cn{width:2.2rem;height:2px;background:var(--bd);position:relative;flex:none;margin:0 -.1rem}
+.cn::after{content:"";position:absolute;top:-3px;width:8px;height:8px;border-radius:50%;background:var(--cy);box-shadow:0 0 8px var(--cy);animation:fl 1.6s linear infinite;animation-delay:var(--d,0s)}
+@keyframes fl{from{left:-4px;opacity:0}20%{opacity:1}to{left:100%;opacity:0}}
+.bar{height:10px;border-radius:5px;background:var(--bd);overflow:hidden}.bar i{display:block;height:100%;width:0;border-radius:5px;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+.fz{background:#0a1224;border-color:#334}.fz.lock{border-color:#5b6b95}.act{border-color:var(--gr);box-shadow:0 0 0 1px #34d39933}
+.blk{border:1px dashed #3a4a73;border-radius:8px;padding:.6rem;text-align:center;font-size:.85rem;color:#9fb0d8;margin:.35rem 0}
+.act .blk{border-color:var(--gr);color:var(--gr);border-style:solid}
+.stp{display:flex;gap:.4rem;font-size:.78rem}.stp div{flex:1;padding:.5rem;border:1px solid var(--bd);border-radius:8px;text-align:center;color:var(--mu);transition:.3s}.stp div.o{border-color:var(--cy);color:var(--cy);background:#22d3ee12}
+.slots{display:grid;grid-template-columns:repeat(5,1fr);gap:.5rem}
+.slot{border:1px dashed var(--bd);border-radius:8px;padding:.5rem;font-size:.72rem;color:var(--mu);height:4.2rem;transition:.4s}
+.slot.f{border:1px solid var(--gr);color:var(--tx);background:#34d39912;animation:fin .4s}
+.rec{display:inline-block;width:10px;height:10px;border-radius:50%;background:#ef4444;margin-right:.4rem;animation:bl 1s infinite}@keyframes bl{50%{opacity:.2}}
+.chart{display:flex;gap:2.5rem;align-items:flex-end;height:15rem;padding:0 1rem;border-bottom:1px solid var(--bd);border-left:1px solid var(--bd)}
+.grp{flex:1;display:flex;gap:.6rem;align-items:flex-end;height:100%}.col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;font-size:.75rem;color:var(--mu)}
+.col i{width:100%;border-radius:6px 6px 0 0;height:0;transition:height 1.1s cubic-bezier(.2,.8,.2,1);background:repeating-linear-gradient(135deg,var(--c) 0 6px,transparent 6px 11px);border:1px solid var(--c)}
+.chip{padding:.55rem 1rem;border:1px solid var(--bd);border-radius:99px;background:#101a31}
+.ft{display:grid;grid-template-columns:repeat(8,1fr);gap:.4rem}.ft i{height:1.1rem;border-radius:3px;background:var(--bl);animation:sh 2s ease-in-out infinite;animation-delay:calc(var(--j)*.07s)}@keyframes sh{50%{opacity:.15}}
+.fus{height:9rem;position:relative}.fus i{position:absolute;top:50%;width:26px;height:26px;border-radius:50%;margin-top:-13px}
+.fus .a{background:var(--cy);animation:ca 2.4s ease-in-out infinite}.fus .b{background:var(--vi);animation:cb 2.4s ease-in-out infinite}.fus .m{left:50%;margin-left:-20px;width:40px;height:40px;margin-top:-20px;background:linear-gradient(135deg,var(--cy),var(--vi));animation:pu 2.4s infinite}
+@keyframes ca{0%{left:5%}50%,100%{left:45%}}@keyframes cb{0%{left:88%}50%,100%{left:50%}}@keyframes pu{50%{transform:scale(1.15)}}
+</style></head><body>
+<header><div class="logo">ISL-<b>HiFormer</b></div><div class="prog" id="prog"></div><span class="badge">Conceptual simulation · no trained model is running</span></header>
+<main id="st"></main>
+<footer><button id="bk">← Back</button><button id="rp">↻ Replay</button><button id="au">▶ Auto-play</button><button id="rs">Reset</button><span class="sp"></span><span class="tag" id="cnt"></span><button id="pm">Presentation (P)</button><button class="pri" id="nx">Next →</button></footer>
+<div id="hint">← → navigate · Space = scene action · P = presentation mode · Esc = exit</div>
+<script>
+const $=s=>document.querySelector(s),st=$('#st');
+const S={i:0,k:5,enr:false,ada:false,auto:false},T=[],R=[];
+const later=(f,m)=>T.push(setTimeout(f,m)),clr=()=>{T.forEach(clearTimeout);T.length=0;R.length=0};
+const SIGNS=['THANK YOU','WATER','HELP','FOOD','SCHOOL','DOCTOR','HOME','FAMILY','MORNING','FRIEND','TEACHER','MEDICINE','PLEASE','SORRY','BOOK','CLOTHES','MONEY','TRAIN','NAME','YES'];
+function fig(c,t,o){const x=c.getContext('2d'),W=c.width,H=c.height,m=o.mode||'both',s=o.s||1,off=(o.off||0)*W,cx=W/2+off*.3;
+x.clearRect(0,0,W,H);const a=Math.sin(t*s*2.2),b=Math.cos(t*s*2.2),yo=o.y||0;
+const P={h:[cx,H*.17],n:[cx,H*.3],sl:[cx-W*.15,H*.34],sr:[cx+W*.15,H*.34],hip:[cx,H*.66]};
+P.er=[P.sr[0]+W*.09,H*.47];P.wr=[cx+W*.13+off*.7+a*W*.07,H*(.25+yo)+b*H*.04];P.el=[P.sl[0]-W*.04,H*.5];P.wl=[cx-W*.13,H*.6+a*H*.01];
+const L=[[P.sl,P.sr],[P.sr,P.er],[P.er,P.wr],[P.sl,P.el],[P.el,P.wl],[P.sl,P.hip],[P.sr,P.hip],[P.h,P.n]];
+x.lineCap='round';x.lineJoin='round';
+if(m!='skel'){const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,'#142040');g.addColorStop(1,'#0a1124');x.fillStyle=g;x.fillRect(0,0,W,H);
+ x.strokeStyle=m=='rgb'?'#46587f':'#26355a';x.lineWidth=W*.06;L.forEach(([p,q])=>{x.beginPath();x.moveTo(...p);x.lineTo(...q);x.stroke()});x.fillStyle=x.strokeStyle;x.beginPath();x.arc(...P.h,W*.07,0,7);x.fill();x.fillStyle='#c9a98a';[P.wr,P.wl].forEach(p=>{x.beginPath();x.arc(p[0],p[1]-6,W*.03,0,7);x.fill()})}
+if(m!='rgb'){x.strokeStyle='#22d3ee';x.lineWidth=2;L.forEach(([p,q])=>{x.beginPath();x.moveTo(...p);x.lineTo(...q);x.stroke()});
+ x.fillStyle='#67e8f9';Object.values(P).forEach(p=>{x.beginPath();x.arc(p[0],p[1],4,0,7);x.fill()});
+ [P.wr,P.wl].forEach((w,hi)=>{for(let k=0;k<5;k++){const ang=-1.9+k*.5+(hi?0:.0)+a*.15*(hi?0:1),tx=w[0]+Math.cos(ang)*W*.055,ty=w[1]+Math.sin(ang)*W*.055;x.strokeStyle='#a78bfa';x.lineWidth=1.5;x.beginPath();x.moveTo(...w);x.lineTo(tx,ty);x.stroke();x.fillStyle='#c4b5fd';x.beginPath();x.arc(tx,ty,3,0,7);x.fill()}})}
+if(o.scan){x.fillStyle='#22d3ee22';x.fillRect(0,(t*120%H),W,3)}}
+function reg(id,o){const c=$('#'+id);R.push({c,o});}
+(function loop(n){R.forEach(r=>fig(r.c,n/1000,r.o));requestAnimationFrame(loop)})(0);
+const cv=(id,w=420,h=360)=>`<canvas id="${id}" width="${w}" height="${h}"></canvas>`;
+const hd=(e,t,s)=>`<div class="in"><div class="eyebrow">${e}</div><h2>${t}</h2>${s?`<p class="sub" style="margin-top:.5rem">${s}</p>`:''}</div>`;
+const tip=(t,k)=>`data-tip="${k}"`;
+
+const SC=[
+{n:'The problem',r:()=>`<div class="in"><div class="eyebrow">Scene 1 · The problem</div><h1>Every signer is different.</h1></div>
+<div class="row">${[['Signer A','Normal signing speed',1],['Signer B','Faster hand movements',2.2],['Signer C','Different hand position & posture',1]].map((s,i)=>`<div class="card in" style="--i:${i+1}">${cv('c'+i,420,300)}<div class="lbl"><b>${s[0]}</b> · ${s[1]}<br>Same intended sign</div>
+<div style="margin-top:.7rem;font-size:.75rem;color:var(--mu);display:flex;justify-content:space-between"><span>Generic model fit</span><span class="tag sim">illustrative</span></div><div class="bar" style="margin-top:.3rem"><i class="bb" data-w="${[82,58,44][i]}" style="background:${['var(--gr)','var(--am)','#f87171'][i]}"></i></div></div>`).join('')}</div>
+<div class="card in" style="--i:5;border-color:var(--bl)"><div class="eyebrow">Research question</div><div style="font-size:1.5rem;margin-top:.3rem">Can we personalize an ISL recognition model to a new signer using just a handful of examples?</div></div>`,
+ s:()=>{[[1,0],[2.2,0],[1,.06]].forEach((p,i)=>reg('c'+i,{s:p[0],off:p[1],y:i==2?.12:0}));later(()=>document.querySelectorAll('.bb').forEach(b=>b.style.width=b.dataset.w+'%'),700)}},
+{n:'Meet ISL-HiFormer',r:()=>{const N=[['Input','ISL video','Any recorded or webcam clip of a person signing.'],['Preprocess','FFmpeg · OpenCV','Decode, resize and normalise video frames.'],['Skeleton','MediaPipe Holistic','Finds body and hand keypoints — a stick-figure of the motion.'],['RGB features','CNN backbone','A CNN describes appearance: hand shape, face, clothing.'],['Cross-attention','Fuse both streams','Each stream looks at the other to pick the most useful cues.'],['Hierarchical transformer','Spatio-temporal','Reads frames, then short motions, then the whole sign.'],['PEFT adapters','Lightweight, trainable','Tiny add-on layers; the only part updated per signer.'],['Output','Word classifier · CTC','Word-level label, plus CTC head for continuous signing.']];
+ return hd('Scene 2 · Architecture','Meet ISL-HiFormer','Hover any block for a plain-language explanation.')+`<div class="card pipe" style="margin-top:1rem">${N.map((n,i)=>`<div class="node in" style="--i:${i+1}" data-tip="${n[2]}"><div class="n">0${i+1}</div><div class="t">${n[0]}</div><div class="s">${n[1]}</div></div>${i<7?`<div class="cn" style="--d:${i*.2}s"></div>`:''}`).join('')}</div>
+<div class="row in" style="--i:9"><div class="card"><div class="eyebrow">Existing research</div><p class="lbl">Dual RGB + pose streams and transformers for sign recognition.</p></div><div class="card"><div class="eyebrow" style="color:var(--vi)">Our contribution (planned)</div><p class="lbl">Meta-learned PEFT adapters for few-shot adaptation to a new ISL signer, backbone frozen.</p></div><div class="card"><div class="eyebrow" style="color:var(--am)">Status</div><p class="lbl">Research plan stage — training and results are TBD.</p></div></div>`}},
+{n:'Dual-stream',r:()=>hd('Scene 3 · Dual-stream architecture','Two ways of seeing one sign')+`<div class="row" style="align-items:center;gap:.6rem"><div class="card in" style="--i:1;flex:1.1">${cv('d0',380,330)}<div class="lbl"><b>Video frame</b> · input signer</div></div><div class="cn"></div>
+<div style="flex:1.2;display:flex;flex-direction:column;gap:.8rem"><div class="card in" style="--i:2">${cv('d1',380,200)}<div class="lbl"><b style="color:var(--cy)">Stream A · Skeleton</b><br>MediaPipe — understanding body and hand movement.</div></div>
+<div class="card in" style="--i:3">${cv('d2',380,120)}<div class="ft" style="margin-top:.5rem">${Array.from({length:16},(_,j)=>`<i style="--j:${j}"></i>`).join('')}</div><div class="lbl"><b style="color:var(--vi)">Stream B · RGB</b><br>CNN — extracting visual appearance features.</div></div></div><div class="cn"></div>
+<div class="card in" style="--i:4"><div class="eyebrow">Cross-attention fusion</div><div class="fus"><i class="a"></i><i class="b"></i><i class="m"></i></div><div class="lbl">Appearance + movement become one representation.</div></div><div class="cn"></div>
+<div class="card in" style="--i:5"><div class="eyebrow">Hierarchical transformer</div>${['Whole sign','Short motions','Frames'].map(x=>`<div class="blk">${x}</div>`).join('')}</div></div>
+<div class="card in" style="--i:6"><span style="font-size:1.2rem">Instead of relying only on video appearance or only on pose, ISL-HiFormer combines both to understand the sign more effectively.</span></div>`,
+ s:()=>{reg('d0',{mode:'both'});reg('d1',{mode:'skel',scan:1});reg('d2',{mode:'rgb'})}},
+{n:'Personalization',r:()=>{const n=S.k;return hd('Scene 4 · The personalization moment','Meet a new signer.')+`<div class="row"><div class="card in" style="--i:1"><div style="display:flex;justify-content:space-between;margin-bottom:.6rem"><span class="tag">Fictional signer profile · Priya</span><span id="rc" style="font-size:.8rem;color:var(--mu)">Camera idle</span></div>${cv('w0',640,330)}
+<div id="msg" style="margin-top:.7rem;color:var(--am)">New signer detected. Personalization required.</div></div>
+<div class="card in" style="--i:2;flex:1.1"><div class="eyebrow">Support examples (K-shot)</div><div style="display:flex;gap:.5rem;margin:.6rem 0">${[5,10,20].map(k=>`<button class="kb ${k==n?'on':''}" data-k="${k}">${k} examples</button>`).join('')}</div>
+<div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:2rem;font-weight:700" id="cn4">0/${n}</span><button class="pri" id="en">START ENROLMENT</button></div>
+<div class="slots" id="sl" style="margin-top:.8rem;grid-template-columns:repeat(${n>10?10:5},1fr)">${Array.from({length:n},(_,i)=>`<div class="slot" style="height:${n>10?'3rem':'4.2rem'}">#${i+1}</div>`).join('')}</div>
+<p class="lbl"><span class="tag sim">illustrative sample inputs</span> — not recorded dataset results.</p></div></div>`},
+ s:()=>{reg('w0',{mode:'both',s:.9,off:.02});document.querySelectorAll('.kb').forEach(b=>b.onclick=()=>{S.k=+b.dataset.k;S.enr=false;S.ada=false;show()});$('#en').onclick=enrol;if(S.enr)done4()}},
+{n:'Few-shot adaptation',r:()=>hd('Scene 5 · Few-shot adaptation','The model doesn’t relearn everything.','The model only adjusts a small set of parameters to understand the new signer’s style.')+`<div class="row"><div class="card fz lock in" style="--i:1;flex:1.4"><div style="display:flex;justify-content:space-between"><div class="eyebrow" style="color:#9fb0d8">Backbone</div><span class="tag">❄ LOCKED / FROZEN</span></div>${['RGB stream (CNN)','Skeleton stream','Cross-attention','Hierarchical transformer'].map(x=>`<div class="blk">${x}</div>`).join('')}</div>
+<div class="card act in" id="ad" style="--i:2"><div style="display:flex;justify-content:space-between"><div class="eyebrow" style="color:var(--gr)">Adapter</div><span class="tag" style="color:var(--gr)">● ACTIVE / TRAINABLE</span></div><div class="blk">Bottleneck layer ↓</div><div style="display:flex;gap:5px;align-items:flex-end;height:4rem" id="wb">${Array.from({length:10},()=>`<i style="flex:1;background:var(--gr);height:30%;border-radius:3px;transition:height .4s"></i>`).join('')}</div><div class="blk">Bottleneck layer ↑</div><div class="lbl">Loss <b id="ls">—</b> <span class="tag sim">illustrative</span></div></div>
+<div style="flex:1.1;display:flex;flex-direction:column;gap:.8rem" class="in" ><div class="card"><div class="eyebrow">Compare cost</div><div class="lbl">Full model retraining · expensive</div><div class="bar"><i class="bb" data-w="100" style="background:#f87171"></i></div><div class="lbl" style="margin-top:.5rem">ISL-HiFormer adapter · lightweight</div><div class="bar"><i class="bb" data-w="7" style="background:var(--gr)"></i></div><div class="lbl"><span class="tag sim">schematic</span> real parameter share to be measured</div></div><div class="card"><div class="lbl"><b>MAML / Reptile</b> provide the meta-learned initialisation for fast adaptation. Backbone stays frozen.</div></div></div></div>
+<div class="stp in" style="--i:4" id="sp">${['Support clips','Forward pass','Prediction loss','Gradient update','Updated adapter'].map(x=>`<div>${x}</div>`).join('')}</div><div><button class="pri" id="ba">START ADAPTATION</button> <span id="am" class="lbl"></span></div>`,
+ s:()=>{later(()=>document.querySelectorAll('.bb').forEach(b=>b.style.width=b.dataset.w+'%'),500);$('#ba').onclick=adapt;if(S.ada)$('#am').textContent='Adapter updated from '+S.k+' clips. Backbone unchanged.'}},
+{n:'Live recognition',r:()=>hd('Scene 6 · Recognition simulation','A sign the model has never seen from this signer.','“HELLO” was not among the support examples.')+`<div class="row"><div class="card in" style="--i:1">${cv('r0',560,330)}<div class="lbl"><span class="tag sim">simulated incoming video</span></div></div>
+<div class="card in" style="--i:2"><div class="eyebrow">Pipeline status</div><div id="ps" style="display:flex;flex-direction:column;gap:.45rem;margin:.7rem 0">${['Video frame capture','Skeleton extraction','RGB processing','Feature fusion','Transformer processing','Adapter-assisted prediction'].map(x=>`<div class="blk" style="margin:0;text-align:left">○ ${x}</div>`).join('')}</div><button class="pri" id="rg">START RECOGNITION</button></div>
+<div class="card in" style="--i:3;text-align:center;display:flex;flex-direction:column;justify-content:center"><div class="eyebrow">Recognized sign</div><div id="pr" style="font-size:3.6rem;font-weight:700;margin:.6rem 0;background:linear-gradient(90deg,var(--cy),var(--vi));-webkit-background-clip:text;background-clip:text;color:transparent">· · ·</div><div class="lbl">Confidence <b id="cf">—</b> <span class="tag sim">illustrative</span></div><div class="lbl" style="margin-top:.5rem"><span class="tag" style="color:var(--gr)">Personalized model: ${S.ada?'adapter active':'adapter not yet trained'}</span><br><br>Recognition using personalized adapter.</div></div></div>`,
+ s:()=>{reg('r0',{mode:'both',s:1.3,off:.02,y:.05,scan:1});$('#rg').onclick=recog}},
+{n:'Before vs after',r:()=>hd('Scene 7 · Before vs after','Illustrative comparison','Placeholder values — not experimental results.')+`<div class="row"><div class="card in" style="--i:1;flex:1.6"><div style="display:flex;gap:.5rem;margin-bottom:.8rem">${[5,10,20].map(k=>`<button class="kc ${k==S.k?'on':''}" data-k="${k}">K = ${k}</button>`).join('')}<span class="tag sim" style="margin-left:auto;align-self:center">SIMULATED PLACEHOLDER VALUES</span></div><div class="chart"><div class="grp">${[['Zero-shot baseline','#8a96b3'],['Non-meta adapter','#4f8cff'],['Meta-learned adapter','#a78bfa']].map((x,i)=>`<div class="col"><span id="v${i}"></span><i id="b${i}" style="--c:${x[1]}"></i><div style="margin-top:.5rem;text-align:center">${x[0]}</div></div>`).join('')}</div></div><div class="lbl">Top-1 accuracy (%), illustrative only.</div></div>
+<div class="card in" style="--i:2"><div class="eyebrow">What the real project will measure</div><ul style="list-style:none;padding:0;margin-top:.7rem;display:flex;flex-direction:column;gap:.5rem">${['Top-1 accuracy','Top-5 accuracy','Word Error Rate (continuous)','Gap-closure ratio','Adaptation time','Trainable parameter share'].map(x=>`<li class="chip">${x}</li>`).join('')}</ul></div></div>
+<div class="card in" style="--i:3;border-color:var(--bl)">Actual performance will be established through leave-one-signer-out evaluation on the INCLUDE dataset.</div>`,
+ s:()=>{const V={5:[40,52,61],10:[40,58,68],20:[40,63,73]};const up=()=>{[0,1,2].forEach(i=>{$('#b'+i).style.height=V[S.k][i]*.95+'%';$('#v'+i).textContent=V[S.k][i]+'*'})};later(up,300);document.querySelectorAll('.kc').forEach(b=>b.onclick=()=>{S.k=+b.dataset.k;document.querySelectorAll('.kc').forEach(x=>x.classList.toggle('on',x===b));up()})}},
+{n:'Impact',r:()=>`<div style="text-align:center;display:flex;flex-direction:column;gap:1.4rem;align-items:center"><div class="eyebrow in">Scene 8 · Real-world impact</div>
+<svg viewBox="0 0 700 200" style="width:min(700px,90%)" class="in"><g stroke="#22d3ee" stroke-width="1.5" fill="none" opacity=".6">${[40,120,200,280].map((y,i)=>`<path d="M350 100 L${i%2?640:60} ${[30,150,40,170][i]}"/>`).join('')}</g><circle cx="350" cy="100" r="30" fill="#4f8cff"><animate attributeName="r" values="28;34;28" dur="3s" repeatCount="indefinite"/></circle><text x="350" y="105" fill="#fff" font-size="13" text-anchor="middle">ISL</text>${[[60,30],[60,150],[640,30],[640,170]].map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="12" fill="#a78bfa"/>`).join('')}</svg>
+<div style="display:flex;gap:.7rem;flex-wrap:wrap;justify-content:center" class="in">${['ISL users','Schools & educators','Hospitals','Public service institutions','Researchers'].map(x=>`<span class="chip">${x}</span>`).join('')}</div>
+<h1 class="in" style="--i:3;max-width:60rem">Technology should adapt to people, not the other way around.</h1>
+<div class="in" style="--i:5"><div style="font-size:2.6rem;font-weight:700;background:linear-gradient(90deg,var(--cy),var(--vi));-webkit-background-clip:text;background-clip:text;color:transparent">ISL-HiFormer</div><p class="sub" style="font-style:italic;margin:.3rem auto">A step towards personalized Indian Sign Language recognition.</p><p class="lbl">Delhi Technological University · Group DTU/CSE/BTP/GP142</p></div></div>`}
+];
+function enrol(){if(S.enr)return;$('#en').disabled=true;$('#rc').innerHTML='<span class="rec"></span>Recording';const sl=[...document.querySelectorAll('.slot')],n=sl.length;
+ sl.forEach((s,i)=>later(()=>{s.classList.add('f');s.innerHTML=`<b>${SIGNS[i]}</b><br>clip ${i+1} ✓`;$('#cn4').textContent=(i+1)+'/'+n;$('#msg').textContent='Capturing sample '+(i+1)+' of '+n+' — '+SIGNS[i];if(i==n-1){S.enr=true;done4()}},700*(i+1)))}
+function done4(){$('#rc').textContent='Recording complete';$('#msg').style.color='var(--gr)';$('#msg').textContent='Your signing samples are ready.';$('#en').disabled=true;$('#cn4').textContent=S.k+'/'+S.k;document.querySelectorAll('.slot').forEach((s,i)=>{s.classList.add('f');s.innerHTML=`<b>${SIGNS[i]}</b><br>clip ${i+1} ✓`})}
+function adapt(){$('#ba').disabled=true;const sp=[...document.querySelectorAll('#sp div')],wb=[...document.querySelectorAll('#wb i')];let t=0;const tk=setInterval(()=>{sp.forEach((d,i)=>d.classList.toggle('o',i==t%5));if(t%5==3||t%5==4)wb.forEach((b,i)=>b.style.height=(20+Math.abs(Math.sin(t*1.7+i*2.1))*75)+'%');$('#ls').textContent=(1.8*Math.exp(-t/6)+.15).toFixed(2);t++;if(t>15){clearInterval(tk);sp.forEach(d=>d.classList.remove('o'));sp[4].classList.add('o');S.ada=true;$('#am').textContent='Adapter updated from '+S.k+' clips. Backbone unchanged.'}},420);T.push(tk)}
+function recog(){$('#rg').disabled=true;const b=[...document.querySelectorAll('#ps .blk')],n=['Video frame capture','Skeleton extraction','RGB processing','Feature fusion','Transformer processing','Adapter-assisted prediction'];
+ b.forEach((d,i)=>later(()=>{d.innerHTML='◐ '+n[i];d.style.color='var(--cy)';later(()=>{d.innerHTML='● '+n[i];d.style.color='var(--gr)'},500)},i*700));later(()=>{$('#pr').textContent='HELLO';$('#cf').textContent='0.93*'},b.length*700+400)}
+function show(){clr();st.innerHTML=`<section class="sc">${SC[S.i].r()}</section>`;SC[S.i].s&&SC[S.i].s();$('#prog').innerHTML=SC.map((s,j)=>`<i class="${j<S.i?'d':j==S.i?'c':''}" data-j="${j}" title="${s.n}"></i>`).join('');$('#prog').childNodes.forEach(e=>e.onclick=()=>{S.i=+e.dataset.j;show()});
+ $('#cnt').textContent=(S.i+1)+' / '+SC.length+' · '+SC[S.i].n;$('#bk').disabled=!S.i;$('#nx').disabled=S.i==SC.length-1;
+ if(S.auto){const a={3:()=>$('#en')&&$('#en').click(),4:()=>$('#ba')&&$('#ba').click(),5:()=>$('#rg')&&$('#rg').click()}[S.i];a&&later(a,1500);later(next,[9000,10000,10000,9500,11500,11000,9000][S.i]||0)}}
+const go=d=>{const j=S.i+d;if(j>=0&&j<SC.length){S.i=j;show()}},next=()=>S.auto&&S.i<SC.length-1?go(1):0;
+$('#nx').onclick=()=>go(1);$('#bk').onclick=()=>go(-1);$('#rp').onclick=()=>{if(S.i==3)S.enr=false;if(S.i==4)S.ada=false;show()};
+$('#rs').onclick=()=>{S.i=0;S.k=5;S.enr=S.ada=S.auto=false;$('#au').textContent='▶ Auto-play';show()};
+$('#au').onclick=()=>{S.auto=!S.auto;$('#au').textContent=S.auto?'❚❚ Stop auto':'▶ Auto-play';show()};
+const pm=()=>{document.body.classList.toggle('pres');try{document.body.classList.contains('pres')?document.documentElement.requestFullscreen():document.fullscreenElement&&document.exitFullscreen()}catch(e){}};
+$('#pm').onclick=pm;
+addEventListener('keydown',e=>{if(e.key=='ArrowRight')go(1);else if(e.key=='ArrowLeft')go(-1);else if(e.key=='p'||e.key=='P')pm();else if(e.key=='Escape')document.body.classList.remove('pres');else if(e.key==' '){e.preventDefault();const b=$('#en,#ba,#rg');b&&!b.disabled&&b.click()}});
+show();
+</script></body></html>
